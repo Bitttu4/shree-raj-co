@@ -13,45 +13,99 @@
 
 <script>
 tailwind.config = {
-theme: {
-extend: {
-fontFamily: {
-sans: ['Inter'],
-serif: ['Playfair Display'],
-},
-colors: {
-primary: "#0f172a",
-accent: "#f59e0b"
-}
-}
-}
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ['Inter'],
+        serif: ['Playfair Display'],
+      },
+      colors: {
+        primary: "#0f172a",
+        accent: "#f59e0b"
+      }
+    }
+  }
 }
 </script>
 
 <style>
-/* Scroll reveal animation */
-.reveal {
-opacity: 0;
-transform: translateY(40px);
-transition: all 0.8s ease;
-}
-.reveal.active {
-opacity: 1;
-transform: translateY(0);
-}
+  /* ── CHANGE THIS to your deployed server URL ─────────────────────────── */
+  /* Examples:
+     Local dev:   http://localhost:3000
+     Railway:     https://shree-raj-co-production.up.railway.app
+     Render:      https://shree-raj-co.onrender.com
+  */
 
-/* smooth hover */
-.card-hover:hover {
-transform: translateY(-6px);
-}
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 0.8s ease;
+  }
+  .reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .card-hover:hover {
+    transform: translateY(-6px);
+  }
+  .whatsapp {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 999;
+  }
 
-/* WhatsApp button */
-.whatsapp {
-position: fixed;
-bottom: 20px;
-right: 20px;
-z-index: 999;
-}
+  /* Form states */
+  .field-error {
+    border-color: #ef4444 !important;
+  }
+  .error-msg {
+    color: #ef4444;
+    font-size: 12px;
+    margin-top: 4px;
+    display: none;
+  }
+  .error-msg.show {
+    display: block;
+  }
+
+  /* Submit button states */
+  #submitBtn[disabled] {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  /* Toast notification */
+  #toast {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    z-index: 1000;
+    padding: 14px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    max-width: 320px;
+    transform: translateY(20px);
+    opacity: 0;
+    transition: all 0.3s ease;
+    pointer-events: none;
+  }
+  #toast.show {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  #toast.success {
+    background: #0f172a;
+    color: white;
+    border-left: 4px solid #f59e0b;
+  }
+  #toast.error {
+    background: #fff;
+    color: #1e293b;
+    border-left: 4px solid #ef4444;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+  }
 </style>
 </head>
 
@@ -59,147 +113,373 @@ z-index: 999;
 
 <!-- NAV -->
 <nav class="fixed w-full bg-white/90 backdrop-blur z-50 border-b">
-<div class="max-w-7xl mx-auto px-6 flex justify-between items-center h-20">
-
-<div class="flex items-center gap-3">
-<div class="bg-primary text-white px-3 py-2 font-bold">S</div>
-<div>
-<p class="font-serif font-bold text-lg">SHREE RAJ & CO.</p>
-<p class="text-xs text-gray-500">Tax Consultants</p>
-</div>
-</div>
-
-<div class="hidden md:flex gap-8 items-center">
-<a href="#services" class="hover:text-black">Services</a>
-<a href="#about">About</a>
-<a href="#contact">Contact</a>
-<button class="bg-primary text-white px-5 py-2 rounded hover:bg-black transition">Consult Now</button>
-</div>
-
-</div>
+  <div class="max-w-7xl mx-auto px-6 flex justify-between items-center h-20">
+    <div class="flex items-center gap-3">
+      <div class="bg-primary text-white px-3 py-2 font-bold">S</div>
+      <div>
+        <p class="font-serif font-bold text-lg">SHREE RAJ & CO.</p>
+        <p class="text-xs text-gray-500">Tax Consultants</p>
+      </div>
+    </div>
+    <div class="hidden md:flex gap-8 items-center">
+      <a href="#services" class="hover:text-black">Services</a>
+      <a href="#about" class="hover:text-black">About</a>
+      <a href="#contact" class="hover:text-black">Contact</a>
+      <a href="#contact">
+        <button class="bg-primary text-white px-5 py-2 rounded hover:bg-black transition">Consult Now</button>
+      </a>
+    </div>
+  </div>
 </nav>
 
 <!-- HERO -->
 <section class="pt-36 pb-20 text-center reveal">
-<h1 class="text-4xl md:text-6xl font-serif font-bold leading-tight">
-Premium Tax Solutions for<br>
-<span class="text-accent">Modern Businesses</span>
-</h1>
-
-<p class="mt-6 text-gray-600 max-w-xl mx-auto">
-We simplify taxation, ensure compliance, and help you grow confidently.
-</p>
-
-<div class="mt-8 flex justify-center gap-4">
-<button class="bg-primary text-white px-6 py-3 rounded hover:scale-105 transition">Get Started</button>
-<button class="border px-6 py-3 rounded hover:bg-gray-100">Learn More</button>
-</div>
+  <h1 class="text-4xl md:text-6xl font-serif font-bold leading-tight">
+    Premium Tax Solutions for<br>
+    <span class="text-accent">Modern Businesses</span>
+  </h1>
+  <p class="mt-6 text-gray-600 max-w-xl mx-auto">
+    We simplify taxation, ensure compliance, and help you grow confidently.
+  </p>
+  <div class="mt-8 flex justify-center gap-4">
+    <a href="#contact"><button class="bg-primary text-white px-6 py-3 rounded hover:scale-105 transition">Get Started</button></a>
+    <a href="#services"><button class="border px-6 py-3 rounded hover:bg-gray-100">Learn More</button></a>
+  </div>
 </section>
 
 <!-- SERVICES -->
 <section id="services" class="py-20 bg-white">
-<div class="max-w-6xl mx-auto px-6">
-
-<h2 class="text-3xl font-serif text-center mb-12 reveal">Our Services</h2>
-
-<div class="grid md:grid-cols-3 gap-8">
-
-<div class="p-6 bg-slate-50 rounded card-hover transition reveal">
-<i data-lucide="file-text"></i>
-<h3 class="mt-4 font-semibold text-lg">Income Tax</h3>
-<p class="text-sm text-gray-600 mt-2">Accurate and fast ITR filing.</p>
-</div>
-
-<div class="p-6 bg-slate-50 rounded card-hover transition reveal">
-<i data-lucide="calculator"></i>
-<h3 class="mt-4 font-semibold text-lg">GST Filing</h3>
-<p class="text-sm text-gray-600 mt-2">Complete GST compliance.</p>
-</div>
-
-<div class="p-6 bg-slate-50 rounded card-hover transition reveal">
-<i data-lucide="building"></i>
-<h3 class="mt-4 font-semibold text-lg">Business Setup</h3>
-<p class="text-sm text-gray-600 mt-2">Company registration services.</p>
-</div>
-
-</div>
-</div>
+  <div class="max-w-6xl mx-auto px-6">
+    <h2 class="text-3xl font-serif text-center mb-12 reveal">Our Services</h2>
+    <div class="grid md:grid-cols-3 gap-8">
+      <div class="p-6 bg-slate-50 rounded card-hover transition reveal">
+        <i data-lucide="file-text" class="text-accent w-8 h-8"></i>
+        <h3 class="mt-4 font-semibold text-lg">Income Tax</h3>
+        <p class="text-sm text-gray-600 mt-2">Accurate and fast ITR filing for individuals and businesses.</p>
+      </div>
+      <div class="p-6 bg-slate-50 rounded card-hover transition reveal">
+        <i data-lucide="calculator" class="text-accent w-8 h-8"></i>
+        <h3 class="mt-4 font-semibold text-lg">GST Filing</h3>
+        <p class="text-sm text-gray-600 mt-2">Complete GST compliance and monthly/quarterly returns.</p>
+      </div>
+      <div class="p-6 bg-slate-50 rounded card-hover transition reveal">
+        <i data-lucide="building" class="text-accent w-8 h-8"></i>
+        <h3 class="mt-4 font-semibold text-lg">Business Setup</h3>
+        <p class="text-sm text-gray-600 mt-2">Company registration and startup advisory services.</p>
+      </div>
+    </div>
+  </div>
 </section>
 
 <!-- TESTIMONIALS -->
 <section class="py-20 bg-slate-100">
-<div class="max-w-6xl mx-auto px-6">
-
-<h2 class="text-3xl font-serif text-center mb-12 reveal">Client Testimonials</h2>
-
-<div class="grid md:grid-cols-3 gap-8">
-
-<div class="bg-white p-6 rounded shadow reveal">
-<p class="text-gray-600">“Very professional and fast service. Highly recommended.”</p>
-<p class="mt-4 font-semibold">— Raj Patel</p>
-</div>
-
-<div class="bg-white p-6 rounded shadow reveal">
-<p class="text-gray-600">“Saved me from tax notice. Amazing support!”</p>
-<p class="mt-4 font-semibold">— Mehul Shah</p>
-</div>
-
-<div class="bg-white p-6 rounded shadow reveal">
-<p class="text-gray-600">“Best CA firm in Vadodara. Smooth process.”</p>
-<p class="mt-4 font-semibold">— Priya Desai</p>
-</div>
-
-</div>
-</div>
+  <div class="max-w-6xl mx-auto px-6">
+    <h2 class="text-3xl font-serif text-center mb-12 reveal">Client Testimonials</h2>
+    <div class="grid md:grid-cols-3 gap-8">
+      <div class="bg-white p-6 rounded shadow reveal">
+        <p class="text-gray-600">"Very professional and fast service. Highly recommended."</p>
+        <p class="mt-4 font-semibold">— Raj Patel</p>
+      </div>
+      <div class="bg-white p-6 rounded shadow reveal">
+        <p class="text-gray-600">"Saved me from tax notice. Amazing support!"</p>
+        <p class="mt-4 font-semibold">— Mehul Shah</p>
+      </div>
+      <div class="bg-white p-6 rounded shadow reveal">
+        <p class="text-gray-600">"Best CA firm in Vadodara. Smooth process."</p>
+        <p class="mt-4 font-semibold">— Priya Desai</p>
+      </div>
+    </div>
+  </div>
 </section>
 
 <!-- CTA -->
 <section class="py-20 text-center bg-primary text-white reveal">
-<h2 class="text-3xl font-serif">Need Expert Tax Help?</h2>
-<p class="mt-4 text-gray-300">Talk to professionals today.</p>
-
-<button class="mt-6 bg-accent text-black px-6 py-3 rounded hover:scale-105 transition">
-Book Consultation
-</button>
+  <h2 class="text-3xl font-serif">Need Expert Tax Help?</h2>
+  <p class="mt-4 text-gray-300">Talk to professionals today.</p>
+  <a href="#contact">
+    <button class="mt-6 bg-accent text-black px-6 py-3 rounded hover:scale-105 transition">
+      Book Consultation
+    </button>
+  </a>
 </section>
 
 <!-- CONTACT -->
 <section id="contact" class="py-20 bg-white">
-<div class="max-w-4xl mx-auto px-6 text-center reveal">
+  <div class="max-w-2xl mx-auto px-6 reveal">
 
-<h2 class="text-3xl font-serif mb-6">Contact Us</h2>
+    <h2 class="text-3xl font-serif text-center mb-2">Contact Us</h2>
+    <p class="text-gray-500 text-center mb-10">Fill the form below and we'll get back within 24 hours.</p>
 
-<p class="text-gray-600 mb-8">Call or message us anytime.</p>
+    <!-- Contact Form -->
+    <div class="bg-slate-50 rounded-xl p-8 shadow-sm">
+      <div id="contactForm">
 
-<p class="font-semibold">📞 +91 9426536855</p>
-<p class="mt-2">📧 shreerajco@yahoo.com</p>
+        <!-- Honeypot (hidden from humans, bots fill it) -->
+        <div style="position:absolute;left:-9999px;opacity:0;pointer-events:none" aria-hidden="true">
+          <input type="text" name="website" id="honeypot" tabindex="-1" autocomplete="off">
+        </div>
 
-</div>
+        <div class="grid md:grid-cols-2 gap-5">
+          <!-- Name -->
+          <div>
+            <label class="block text-sm font-medium mb-1" for="name">Full Name <span class="text-red-500">*</span></label>
+            <input
+              id="name" name="name" type="text" autocomplete="name"
+              placeholder="Ramesh Patel"
+              class="w-full border border-slate-200 bg-white rounded px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition"
+            >
+            <p class="error-msg" id="name-error">Please enter your full name.</p>
+          </div>
+
+          <!-- Email -->
+          <div>
+            <label class="block text-sm font-medium mb-1" for="email">Email <span class="text-red-500">*</span></label>
+            <input
+              id="email" name="email" type="email" autocomplete="email"
+              placeholder="ramesh@example.com"
+              class="w-full border border-slate-200 bg-white rounded px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition"
+            >
+            <p class="error-msg" id="email-error">Please enter a valid email.</p>
+          </div>
+        </div>
+
+        <!-- Phone -->
+        <div class="mt-5">
+          <label class="block text-sm font-medium mb-1" for="phone">Phone Number</label>
+          <input
+            id="phone" name="phone" type="tel" autocomplete="tel"
+            placeholder="9876543210"
+            class="w-full border border-slate-200 bg-white rounded px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition"
+          >
+          <p class="error-msg" id="phone-error">Enter a valid 10-digit mobile number.</p>
+        </div>
+
+        <!-- Service -->
+        <div class="mt-5">
+          <label class="block text-sm font-medium mb-1" for="service">Service Needed</label>
+          <select
+            id="service" name="service"
+            class="w-full border border-slate-200 bg-white rounded px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition text-gray-600"
+          >
+            <option value="">Select a service...</option>
+            <option value="Income Tax / ITR Filing">Income Tax / ITR Filing</option>
+            <option value="GST Filing & Compliance">GST Filing & Compliance</option>
+            <option value="Business Registration">Business Registration</option>
+            <option value="Tax Notice / Scrutiny">Tax Notice / Scrutiny</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <!-- Message -->
+        <div class="mt-5">
+          <label class="block text-sm font-medium mb-1" for="message">Message <span class="text-red-500">*</span></label>
+          <textarea
+            id="message" name="message" rows="4"
+            placeholder="Briefly describe what you need help with..."
+            class="w-full border border-slate-200 bg-white rounded px-4 py-2.5 text-sm focus:outline-none focus:border-primary transition resize-none"
+          ></textarea>
+          <p class="error-msg" id="message-error">Message must be at least 10 characters.</p>
+        </div>
+
+        <!-- Submit -->
+        <button
+          id="submitBtn"
+          type="button"
+          onclick="submitContactForm()"
+          class="mt-6 w-full bg-primary text-white py-3 rounded font-medium hover:bg-slate-700 transition flex items-center justify-center gap-2"
+        >
+          <span id="submitText">Send Message</span>
+          <svg id="submitSpinner" class="hidden animate-spin w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+          </svg>
+        </button>
+
+        <p class="text-xs text-gray-400 mt-3 text-center">
+          Or reach us directly: <a href="tel:+919426536855" class="underline">+91 9426536855</a>
+        </p>
+      </div>
+
+      <!-- Success State -->
+      <div id="successState" class="hidden text-center py-8">
+        <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+          </svg>
+        </div>
+        <h3 class="text-xl font-semibold text-slate-800">Message Sent!</h3>
+        <p class="text-gray-500 mt-2 text-sm">We've received your enquiry and will contact you within 24 hours.</p>
+        <button onclick="resetForm()" class="mt-5 text-sm text-primary underline">Send another message</button>
+      </div>
+    </div>
+
+    <!-- Direct contact info -->
+    <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center text-center">
+      <a href="tel:+919426536855" class="flex items-center gap-2 text-sm text-gray-600 hover:text-black">
+        <i data-lucide="phone" class="w-4 h-4"></i> +91 9426536855
+      </a>
+      <a href="mailto:shreerajco@yahoo.com" class="flex items-center gap-2 text-sm text-gray-600 hover:text-black">
+        <i data-lucide="mail" class="w-4 h-4"></i> shreerajco@yahoo.com
+      </a>
+      <a href="https://wa.me/919426536855" class="flex items-center gap-2 text-sm text-gray-600 hover:text-black">
+        <i data-lucide="message-circle" class="w-4 h-4"></i> WhatsApp
+      </a>
+    </div>
+  </div>
 </section>
 
+<!-- FOOTER -->
+<footer class="bg-primary text-gray-400 py-8 text-center text-sm">
+  <p>© 2025 Shree Raj & Co. · Tax Consultants, Vadodara</p>
+</footer>
+
 <!-- WHATSAPP BUTTON -->
-<a href="https://wa.me/919426536855" class="whatsapp">
-<div class="bg-green-500 text-white p-4 rounded-full shadow-lg hover:scale-110 transition">
-<i data-lucide="message-circle"></i>
-</div>
+<a href="https://wa.me/919426536855" class="whatsapp" title="Chat on WhatsApp">
+  <div class="bg-green-500 text-white p-4 rounded-full shadow-lg hover:scale-110 transition">
+    <i data-lucide="message-circle"></i>
+  </div>
 </a>
 
-<!-- SCRIPT -->
+<!-- Toast -->
+<div id="toast"></div>
+
 <script>
-lucide.createIcons();
+  lucide.createIcons();
 
-// scroll reveal
-const reveals = document.querySelectorAll(".reveal");
+  // ── CONFIGURE: Change this to your server URL ────────────────────────────
+  // Local dev: "http://localhost:3000"
+  // Railway:   "https://your-app.up.railway.app"
+  // Render:    "https://your-app.onrender.com"
+  const SERVER_URL = "http://localhost:3000";
+  // ─────────────────────────────────────────────────────────────────────────
 
-window.addEventListener("scroll", () => {
-reveals.forEach(el => {
-const top = el.getBoundingClientRect().top;
-if (top < window.innerHeight - 100) {
-el.classList.add("active");
-}
-});
-});
+  // Scroll reveal
+  const reveals = document.querySelectorAll(".reveal");
+  const checkReveal = () => {
+    reveals.forEach(el => {
+      if (el.getBoundingClientRect().top < window.innerHeight - 100) {
+        el.classList.add("active");
+      }
+    });
+  };
+  window.addEventListener("scroll", checkReveal);
+  checkReveal(); // run on load
+
+  // ── Validation helpers ──────────────────────────────────────────────────
+  function setError(fieldId, show) {
+    const field = document.getElementById(fieldId);
+    const error = document.getElementById(fieldId + "-error");
+    if (show) {
+      field.classList.add("field-error");
+      error.classList.add("show");
+    } else {
+      field.classList.remove("field-error");
+      if (error) error.classList.remove("show");
+    }
+  }
+
+  function validateForm() {
+    let valid = true;
+    const name    = document.getElementById("name").value.trim();
+    const email   = document.getElementById("email").value.trim();
+    const phone   = document.getElementById("phone").value.trim();
+    const message = document.getElementById("message").value.trim();
+
+    // Name
+    if (!name || name.length > 100) { setError("name", true); valid = false; }
+    else setError("name", false);
+
+    // Email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email || !emailRegex.test(email)) { setError("email", true); valid = false; }
+    else setError("email", false);
+
+    // Phone (optional, but if filled must be valid Indian mobile)
+    if (phone && !/^[6-9]\d{9}$/.test(phone)) { setError("phone", true); valid = false; }
+    else setError("phone", false);
+
+    // Message
+    if (!message || message.length < 10 || message.length > 1000) { setError("message", true); valid = false; }
+    else setError("message", false);
+
+    return valid;
+  }
+
+  // ── Toast ───────────────────────────────────────────────────────────────
+  function showToast(msg, type = "success") {
+    const toast = document.getElementById("toast");
+    toast.textContent = msg;
+    toast.className = `show ${type}`;
+    setTimeout(() => { toast.className = ""; }, 5000);
+  }
+
+  // ── Submit ──────────────────────────────────────────────────────────────
+  async function submitContactForm() {
+    if (!validateForm()) return;
+
+    // Check honeypot
+    if (document.getElementById("honeypot").value) return;
+
+    const btn     = document.getElementById("submitBtn");
+    const spinner = document.getElementById("submitSpinner");
+    const text    = document.getElementById("submitText");
+
+    btn.disabled = true;
+    spinner.classList.remove("hidden");
+    text.textContent = "Sending…";
+
+    const payload = {
+      name:    document.getElementById("name").value.trim(),
+      email:   document.getElementById("email").value.trim(),
+      phone:   document.getElementById("phone").value.trim(),
+      service: document.getElementById("service").value,
+      message: document.getElementById("message").value.trim(),
+      website: document.getElementById("honeypot").value,  // honeypot
+    };
+
+    try {
+      const res  = await fetch(`${SERVER_URL}/contact`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        document.getElementById("contactForm").classList.add("hidden");
+        document.getElementById("successState").classList.remove("hidden");
+      } else if (res.status === 429) {
+        showToast("Too many submissions. Please try again later.", "error");
+      } else if (data.errors) {
+        showToast(data.errors[0].msg, "error");
+      } else {
+        showToast(data.error || "Something went wrong. Please call us.", "error");
+      }
+    } catch {
+      showToast("Could not connect. Please WhatsApp or call us directly.", "error");
+    } finally {
+      btn.disabled = false;
+      spinner.classList.add("hidden");
+      text.textContent = "Send Message";
+    }
+  }
+
+  function resetForm() {
+    ["name","email","phone","message"].forEach(id => {
+      document.getElementById(id).value = "";
+      setError(id, false);
+    });
+    document.getElementById("service").value = "";
+    document.getElementById("contactForm").classList.remove("hidden");
+    document.getElementById("successState").classList.add("hidden");
+  }
+
+  // Allow Enter key on inputs to submit
+  document.querySelectorAll("#contactForm input, #contactForm textarea").forEach(el => {
+    el.addEventListener("keydown", e => {
+      if (e.key === "Enter" && el.tagName !== "TEXTAREA") submitContactForm();
+    });
+  });
 </script>
-
 </body>
 </html>
