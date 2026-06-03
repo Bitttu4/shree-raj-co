@@ -1,149 +1,81 @@
-Accounting Firm Website
+# Shree Raj & Co. Website
 
-Professional website for an accounting and financial services firm, built and maintained using modern web technologies and hosted on GitHub.
+Pastel, responsive website for Shree Raj & Co., a tax consulting firm in Vadodara. The frontend is static and deploys to GitHub Pages. The contact form can connect to the included Express API or fall back to a prefilled email draft when the API URL is not configured.
 
+## Features
 
----
+- Clean responsive UI with local visual asset
+- Services, about, process, testimonials, FAQ, and contact sections
+- Accessible form validation and mobile navigation
+- Express contact API with rate limiting, CORS controls, validation, email notifications, and storage fallback
+- GitHub Pages workflow for static deployment
 
-📌 Overview
+## Project Structure
 
-This project is a responsive and professional accounting firm website designed to showcase:
-
-Company profile
-
-Accounting & taxation services
-
-Financial consulting
-
-Client contact information
-
-Business credibility and online presence
-
-
-The goal of this project is to provide a clean, fast, and user-friendly digital platform for clients and visitors.
-
-
----
-
-✨ Features
-
-Modern responsive design
-
-Mobile-friendly interface
-
-Professional landing page
-
-Services section
-
-About Us section
-
-Contact form
-
-Smooth navigation
-
-Fast loading performance
-
-SEO-friendly structure
-
-
-
----
-
-🛠️ Technologies Used
-
-HTML5
-
-CSS3
-
-JavaScript
-
-Bootstrap / Tailwind CSS (if used)
-
-Git & GitHub
-
-
-
----
-
-📂 Project Structure
-
+```text
+.
 ├── index.html
-├── assets
-│   ├── css
-│   ├── js
-│   ├── images
-│   └── icons
-├── pages
-├── README.md
-└── LICENSE
+├── raju_mama.html
+├── assets/
+│   └── consulting-workspace.png
+├── server/
+│   ├── server.js
+│   ├── package.json
+│   └── env.example
+├── .github/workflows/pages.yml
+├── .nojekyll
+├── SETUP.md
+└── README.md
+```
 
+## Local Frontend
 
----
+Open `index.html` directly, or run a small static server from the repo root:
 
-🚀 Getting Started
+```bash
+python -m http.server 5500
+```
 
-Clone the Repository
+Then visit `http://localhost:5500`.
 
-git clone https://github.com/your-username/your-repository-name.git
+## Local Backend
 
-Open the Project
+```bash
+cd server
+copy env.example .env
+npm install
+npm run dev
+```
 
-Simply open index.html in your browser.
+The API runs at `http://localhost:3000`. Local frontend pages automatically try that URL.
 
-Or use VS Code Live Server for better development experience.
+## Deploy
 
+Push to `main`. The GitHub Actions workflow publishes `index.html`, `raju_mama.html`, `.nojekyll`, and `assets/` to GitHub Pages.
 
----
+For a custom domain, create a root `CNAME` file containing only the domain, for example:
 
-📱 Responsive Design
+```text
+www.shreerajco.com
+```
 
-The website is optimized for:
+Then configure the same domain in GitHub repository settings under Pages.
 
-Desktop
+## Backend Hosting
 
-Tablet
+Deploy the `server/` folder to any Node host such as Render, Railway, Fly.io, or a VPS.
 
-Mobile Devices
+Use:
 
+```text
+Build command: npm install
+Start command: npm start
+```
 
+After the API is live, set the frontend API URL in `index.html`:
 
----
+```html
+<meta name="contact-api" content="https://your-api-domain.example">
+```
 
-🎯 Purpose of the Project
-
-This website was created to help an accounting firm establish a professional online presence and make accounting services more accessible to clients.
-
-
----
-
-🔒 License
-
-This project is licensed under the MIT License.
-
-
----
-
-👨‍💻 Developer
-
-Developed by Aarya Patel
-
-GitHub: GitHub
-
-
----
-
-📞 Contact
-
-For business inquiries or collaboration:
-
-Email: your-email@example.com
-
-Phone: +91-XXXXXXXXXX
-
-
-
----
-
-⭐ Support
-
-If you like this project, consider giving it a ⭐ on GitHub.y
+Keep email and Firebase credentials only in backend environment variables.

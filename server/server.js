@@ -1,3 +1,5 @@
+const fs = require("fs/promises");
+const path = require("path");
 const express = require("express");
 const nodemailer = require("nodemailer");
 const rateLimit = require("express-rate-limit");
@@ -7,138 +9,330 @@ const admin = require("firebase-admin");
 require("dotenv").config();
 
 const app = express();
-app.use(express.json());
-app.use(cors({ origin: process.env.ALLOWED_ORIGIN || "*" }));
+const PORT = Number(process.env.PORT) || 3000;
+const OWNER_EMAIL = process.env.OWNER_EMAIL || process.env.EMAIL_USER || "shreerajco@yahoo.com";
+const SERVICE_VALUES = [
+  "Income Tax / ITR Filing",
+  "GST Filing & Compliance",
+  "Business Registration",
+  "Tax Notice / Scrutiny",
+  "Accounting Support",
+  "Other"
+];
 
-// ── Initialize Firebase Admin (for storing submissions) ──────────────────────
-const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
-admin.initializeApp({ credential: admin.credential.cert(serviceAccount) });
-const db = admin.firestore();
-
-// ── Email transporter (Gmail) ─────────────────────────────────────────────────
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.EMAIL_USER,    // your Gmail: shreerajco@yahoo.com or Gmail
-    pass: process.env.EMAIL_PASS,    // Gmail App Password (not normal password)
-  },
+app.set("trust proxy", 1);
+app.disable("x-powered-by");
+app.use(express.json({ limit: "32kb" }));
+app.use(express.urlencoded({ extended: false, limit: "32kb" }));
+app.use((_, res, next) => {
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("Referrer-Policy", "no-referrer");
+  res.setHeader("Permissions-Policy", "geolocation=(), microphone=(), camera=()");
+  next();
 });
 
-// ── Rate limiter: max 5 submissions per IP per hour ───────────────────────────
+const allowedOrigins = (process.env.ALLOWED_ORIGINS || process.env.ALLOWED_ORIGIN || "*")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+app.use(cors({
+  origin(origin, callback) {
+    if (!origin || allowedOrigins.includes("*") || allowedOrigins.includes(origin)) {
+      callback(null, true);
+      return;
+    }
+
+    callback(new Error("Origin not allowed by CORS"));
+  },
+  methods: ["GET", "POST", "OPTIONS"],
+  allowedHeaders: ["Content-Type"],
+  optionsSuccessStatus: 204
+}));
+
 const contactLimiter = rateLimit({
-  windowMs: 60 * 60 * 1000, // 1 hour
-  max: 5,
-  message: { error: "Too many submissions. Please try again after an hour." },
+  windowMs: Number(process.env.CONTACT_RATE_LIMIT_WINDOW_MS) || 60 * 60 * 1000,
+  max: Number(process.env.CONTACT_RATE_LIMIT_MAX) || 5,
   standardHeaders: true,
   legacyHeaders: false,
+  message: { error: "Too many submissions. Please try again later." }
 });
 
-// ── Honeypot + Validation middleware ─────────────────────────────────────────
+function parseServiceAccount() {
+  if (!process.env.FIREBASE_SERVICE_ACCOUNT) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+  } catch (error) {
+    console.warn("FIREBASE_SERVICE_ACCOUNT is not valid JSON. Firestore storage is disabled.");
+    return null;
+  }
+}
+
+function initializeFirestore() {
+  const serviceAccount = parseServiceAccount();
+
+  if (!serviceAccount) {
+    return null;
+  }
+
+  try {
+    if (!admin.apps.length) {
+      admin.initializeApp({ credential: admin.credential.cert(serviceAccount) });
+    }
+
+    return admin.firestore();
+  } catch (error) {
+    console.warn("Firebase Admin could not be initialized. Firestore storage is disabled.");
+    return null;
+  }
+}
+
+function createTransporter() {
+  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS || !OWNER_EMAIL) {
+    return null;
+  }
+
+  if (process.env.SMTP_HOST) {
+    return nodemailer.createTransport({
+      host: process.env.SMTP_HOST,
+      port: Number(process.env.SMTP_PORT) || 587,
+      secure: process.env.SMTP_SECURE === "true",
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+      }
+    });
+  }
+
+  return nodemailer.createTransport({
+    service: process.env.EMAIL_SERVICE || "gmail",
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS
+    }
+  });
+}
+
+const db = initializeFirestore();
+const transporter = createTransporter();
+
+function normalizePhone(value) {
+  if (!value) {
+    return "";
+  }
+
+  const digits = String(value).replace(/\D/g, "");
+  return digits.startsWith("91") && digits.length === 12 ? digits.slice(2) : digits;
+}
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function textToHtml(value) {
+  return escapeHtml(value).replace(/\r?\n/g, "<br>");
+}
+
+function safeSubject(value) {
+  return String(value ?? "").replace(/[\r\n]+/g, " ").slice(0, 120);
+}
+
+async function saveSubmission(record) {
+  const storage = { firestore: false, file: false };
+
+  if (db) {
+    await db.collection("contact_submissions").add({
+      ...record,
+      submittedAt: admin.firestore.Timestamp.fromDate(new Date(record.submittedAt))
+    });
+    storage.firestore = true;
+  }
+
+  if (process.env.DISABLE_FILE_STORAGE !== "true") {
+    const dataDir = path.resolve(__dirname, process.env.DATA_DIR || "data");
+    const filePath = path.join(dataDir, "contact-submissions.jsonl");
+    await fs.mkdir(dataDir, { recursive: true });
+    await fs.appendFile(filePath, `${JSON.stringify(record)}\n`, "utf8");
+    storage.file = true;
+  }
+
+  return storage;
+}
+
+async function sendNotifications(record) {
+  if (!transporter) {
+    return { enabled: false, owner: false, customer: false };
+  }
+
+  const rows = [
+    ["Name", record.name],
+    ["Email", record.email],
+    ["Phone", record.phone || "Not shared"],
+    ["Service", record.service],
+    ["Message", record.message],
+    ["Time", new Date(record.submittedAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })]
+  ].map(([label, value]) => `
+      <tr>
+        <td style="padding:10px 0;color:#60737b;width:96px;vertical-align:top">${escapeHtml(label)}</td>
+        <td style="padding:10px 0;color:#21343c;font-weight:600">${textToHtml(value)}</td>
+      </tr>
+    `).join("");
+
+  await transporter.sendMail({
+    from: `"Shree Raj & Co. Website" <${process.env.EMAIL_USER}>`,
+    to: OWNER_EMAIL,
+    subject: `New website enquiry: ${safeSubject(record.name)}`,
+    replyTo: record.email,
+    html: `
+      <div style="font-family:Arial,sans-serif;max-width:640px;margin:auto;border:1px solid #d8e6e2;border-radius:8px;overflow:hidden">
+        <div style="background:#1f4659;color:#fff;padding:24px">
+          <h2 style="margin:0;font-size:20px">New Contact Form Submission</h2>
+          <p style="margin:6px 0 0;color:#dff3ed;font-size:13px">Shree Raj & Co. website enquiry</p>
+        </div>
+        <div style="padding:24px;background:#fbfdfb">
+          <table style="width:100%;border-collapse:collapse">${rows}</table>
+        </div>
+      </div>
+    `
+  });
+
+  await transporter.sendMail({
+    from: `"Shree Raj & Co." <${process.env.EMAIL_USER}>`,
+    to: record.email,
+    subject: "We received your enquiry | Shree Raj & Co.",
+    html: `
+      <div style="font-family:Arial,sans-serif;max-width:620px;margin:auto;color:#21343c">
+        <h2 style="color:#1f4659">Thank you, ${escapeHtml(record.name)}.</h2>
+        <p>We received your enquiry and will contact you shortly.</p>
+        <p style="color:#60737b;font-size:14px"><strong>Service:</strong> ${escapeHtml(record.service)}</p>
+        <p style="color:#60737b;font-size:14px"><strong>Your message:</strong><br>${textToHtml(record.message)}</p>
+        <hr style="border:none;border-top:1px solid #d8e6e2;margin:24px 0">
+        <p style="font-size:13px;color:#60737b">Shree Raj & Co. | Tax Consultants, Vadodara<br>+91 94265 36855</p>
+      </div>
+    `
+  });
+
+  return { enabled: true, owner: true, customer: true };
+}
+
 const validateContact = [
   body("name")
     .trim()
-    .notEmpty().withMessage("Name is required.")
-    .isLength({ max: 100 }).withMessage("Name too long."),
-
+    .isLength({ min: 2, max: 100 }).withMessage("Enter a valid full name."),
   body("email")
     .trim()
-    .notEmpty().withMessage("Email is required.")
-    .isEmail().withMessage("Invalid email address.")
+    .isEmail().withMessage("Enter a valid email address.")
     .normalizeEmail(),
-
   body("phone")
     .optional({ checkFalsy: true })
+    .customSanitizer(normalizePhone)
     .matches(/^[6-9]\d{9}$/).withMessage("Enter a valid 10-digit Indian mobile number."),
-
+  body("service")
+    .optional({ checkFalsy: true })
+    .trim()
+    .isIn(SERVICE_VALUES).withMessage("Choose a valid service."),
   body("message")
     .trim()
-    .notEmpty().withMessage("Message is required.")
-    .isLength({ min: 10, max: 1000 }).withMessage("Message must be 10–1000 characters."),
-
-  // Honeypot: bots fill hidden field "website", humans leave it blank
+    .isLength({ min: 10, max: 1200 }).withMessage("Message must be 10 to 1200 characters."),
   body("website")
+    .optional({ checkFalsy: true })
     .custom((value) => {
-      if (value && value.length > 0) throw new Error("Spam detected.");
+      if (value) {
+        throw new Error("Spam detected.");
+      }
+
       return true;
-    }),
+    })
 ];
 
-// ── POST /contact ─────────────────────────────────────────────────────────────
-app.post("/contact", contactLimiter, validateContact, async (req, res) => {
-  // 1. Check validation errors
+app.get(["/health", "/api/health"], (_, res) => {
+  res.json({
+    status: "ok",
+    service: "shree-raj-co-api",
+    storage: {
+      firestore: Boolean(db),
+      localFile: process.env.DISABLE_FILE_STORAGE !== "true"
+    },
+    email: Boolean(transporter),
+    allowedOrigins
+  });
+});
+
+app.get("/api/services", (_, res) => {
+  res.json({
+    success: true,
+    services: SERVICE_VALUES.map((name) => ({ name }))
+  });
+});
+
+app.post(["/contact", "/api/contact"], contactLimiter, validateContact, async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
+    return res.status(400).json({ success: false, errors: errors.array() });
   }
 
-  const { name, email, phone, message } = req.body;
-  const timestamp = new Date();
+  const record = {
+    name: req.body.name,
+    email: req.body.email,
+    phone: req.body.phone || "",
+    service: req.body.service || "General enquiry",
+    message: req.body.message,
+    submittedAt: new Date().toISOString(),
+    ip: req.ip,
+    userAgent: req.get("user-agent") || ""
+  };
 
   try {
-    // 2. Store in Firestore
-    await db.collection("contact_submissions").add({
-      name,
-      email,
-      phone: phone || "—",
-      message,
-      submittedAt: admin.firestore.Timestamp.fromDate(timestamp),
-      ip: req.ip,
+    const storage = await saveSubmission(record);
+    const notifications = await sendNotifications(record);
+
+    if (!storage.firestore && !storage.file && !notifications.owner) {
+      throw new Error("No storage or notification channel is configured.");
+    }
+
+    res.status(201).json({
+      success: true,
+      message: "Enquiry received.",
+      storage,
+      notifications
     });
-
-    // 3. Send email to owner
-    await transporter.sendMail({
-      from: `"Shree Raj & Co. Website" <${process.env.EMAIL_USER}>`,
-      to: process.env.OWNER_EMAIL,  // shreerajco@yahoo.com
-      subject: `📨 New Contact: ${name}`,
-      html: `
-        <div style="font-family:Arial,sans-serif;max-width:600px;margin:auto;border:1px solid #e2e8f0;border-radius:8px;overflow:hidden">
-          <div style="background:#0f172a;color:white;padding:24px">
-            <h2 style="margin:0;font-size:20px">New Contact Form Submission</h2>
-            <p style="margin:4px 0 0;opacity:0.7;font-size:13px">Shree Raj & Co. Website</p>
-          </div>
-          <div style="padding:24px">
-            <table style="width:100%;border-collapse:collapse">
-              <tr><td style="padding:8px 0;color:#64748b;width:80px">Name</td><td style="padding:8px 0;font-weight:600">${name}</td></tr>
-              <tr><td style="padding:8px 0;color:#64748b">Email</td><td style="padding:8px 0"><a href="mailto:${email}">${email}</a></td></tr>
-              <tr><td style="padding:8px 0;color:#64748b">Phone</td><td style="padding:8px 0">${phone || "—"}</td></tr>
-              <tr><td style="padding:8px 0;color:#64748b;vertical-align:top">Message</td><td style="padding:8px 0">${message.replace(/\n/g, "<br>")}</td></tr>
-              <tr><td style="padding:8px 0;color:#64748b">Time</td><td style="padding:8px 0;font-size:13px">${timestamp.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })} IST</td></tr>
-            </table>
-          </div>
-          <div style="background:#f8fafc;padding:16px 24px;font-size:12px;color:#94a3b8">
-            Reply directly to this email to respond to ${name}.
-          </div>
-        </div>
-      `,
-      replyTo: email,
+  } catch (error) {
+    console.error("Contact submission error:", error);
+    res.status(502).json({
+      success: false,
+      error: "The enquiry could not be processed. Please call or WhatsApp us directly."
     });
-
-    // 4. Send confirmation to user
-    await transporter.sendMail({
-      from: `"Shree Raj & Co." <${process.env.EMAIL_USER}>`,
-      to: email,
-      subject: "We received your message — Shree Raj & Co.",
-      html: `
-        <div style="font-family:Arial,sans-serif;max-width:600px;margin:auto">
-          <h2 style="color:#0f172a">Thank you, ${name}!</h2>
-          <p>We've received your message and will get back to you within 24 hours.</p>
-          <p style="color:#64748b;font-size:14px">Your message:<br><em>${message}</em></p>
-          <hr style="border:none;border-top:1px solid #e2e8f0;margin:24px 0">
-          <p style="font-size:13px;color:#94a3b8">Shree Raj & Co. | Tax Consultants, Vadodara<br>📞 +91 9426536855</p>
-        </div>
-      `,
-    });
-
-    res.json({ success: true, message: "Message sent! We'll be in touch soon." });
-
-  } catch (err) {
-    console.error("Contact submission error:", err);
-    res.status(500).json({ error: "Server error. Please try WhatsApp or call us directly." });
   }
 });
 
-// ── Health check ──────────────────────────────────────────────────────────────
-app.get("/health", (_, res) => res.json({ status: "ok" }));
+app.use((req, res) => {
+  res.status(404).json({ success: false, error: "Not found" });
+});
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.use((error, req, res, next) => {
+  if (error.message === "Origin not allowed by CORS") {
+    res.status(403).json({ success: false, error: "Origin not allowed." });
+    return;
+  }
+
+  next(error);
+});
+
+app.use((error, req, res, next) => {
+  console.error("Unhandled server error:", error);
+  res.status(500).json({ success: false, error: "Server error." });
+});
+
+app.listen(PORT, () => {
+  console.log(`Shree Raj & Co. API listening on port ${PORT}`);
+  console.log(`Storage: firestore=${Boolean(db)} localFile=${process.env.DISABLE_FILE_STORAGE !== "true"}`);
+  console.log(`Email notifications: ${Boolean(transporter)}`);
+});

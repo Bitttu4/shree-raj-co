@@ -1,0 +1,1698 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Shree Raj &amp; Co. | Tax Consultants in Vadodara</title>
+  <meta name="description" content="Shree Raj & Co. helps individuals, professionals, and businesses with income tax, GST, registrations, notices, and compliance advisory in Vadodara.">
+  <meta name="theme-color" content="#e8f5f1">
+  <meta name="contact-api" content="">
+  <script>
+    window.SHREE_RAJ_CONFIG = window.SHREE_RAJ_CONFIG || { apiBase: "" };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="preload" as="image" href="assets/consulting-workspace.png">
+  <script src="https://unpkg.com/lucide@latest" defer></script>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #21343c;
+      --muted: #60737b;
+      --paper: #fbfdfb;
+      --soft: #f4f8f7;
+      --line: #d8e6e2;
+      --mint: #dff3ed;
+      --mint-strong: #7eb8aa;
+      --sky: #dceeff;
+      --coral: #f5aa97;
+      --coral-dark: #b85f4e;
+      --clay: #f4e2bf;
+      --blue: #315e73;
+      --blue-dark: #1f4659;
+      --white: #ffffff;
+      --danger: #b74242;
+      --success: #2f6f5f;
+      --radius: 8px;
+      --shadow: 0 22px 60px rgba(49, 94, 115, 0.16);
+      --shadow-soft: 0 12px 34px rgba(49, 94, 115, 0.1);
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      line-height: 1.6;
+      text-rendering: optimizeLegibility;
+    }
+
+    body.menu-open {
+      overflow: hidden;
+    }
+
+    img,
+    svg {
+      display: block;
+      max-width: 100%;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .skip-link {
+      position: absolute;
+      left: 1rem;
+      top: -4rem;
+      z-index: 100;
+      background: var(--blue-dark);
+      color: var(--white);
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius);
+      transition: top 180ms ease;
+    }
+
+    .skip-link:focus {
+      top: 1rem;
+    }
+
+    .site-header {
+      position: fixed;
+      inset: 0 0 auto;
+      z-index: 50;
+      border-bottom: 1px solid rgba(216, 230, 226, 0.78);
+      background: rgba(251, 253, 251, 0.88);
+      backdrop-filter: blur(18px);
+    }
+
+    .nav-shell {
+      width: min(1180px, calc(100% - 32px));
+      min-height: 74px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      min-width: 0;
+    }
+
+    .brand-mark {
+      width: 42px;
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      border: 1px solid rgba(49, 94, 115, 0.18);
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, var(--blue), var(--mint-strong));
+      color: var(--white);
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+
+    .brand-copy {
+      display: grid;
+      gap: 0.02rem;
+      min-width: 0;
+    }
+
+    .brand-copy strong {
+      font-size: 0.98rem;
+      line-height: 1.1;
+      letter-spacing: 0;
+      white-space: nowrap;
+    }
+
+    .brand-copy span {
+      color: var(--muted);
+      font-size: 0.78rem;
+      line-height: 1.2;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.4rem;
+      color: #40565f;
+      font-size: 0.94rem;
+      font-weight: 600;
+    }
+
+    .nav-links a {
+      position: relative;
+      padding-block: 0.5rem;
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0.2rem;
+      height: 2px;
+      background: var(--coral);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 180ms ease;
+    }
+
+    .nav-links a:hover::after,
+    .nav-links a:focus-visible::after {
+      transform: scaleX(1);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+    }
+
+    .icon-button {
+      width: 42px;
+      aspect-ratio: 1;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--white);
+      color: var(--blue);
+      display: none;
+      place-items: center;
+    }
+
+    .menu-symbol {
+      width: 18px;
+      height: 14px;
+      position: relative;
+      display: block;
+    }
+
+    .menu-symbol::before,
+    .menu-symbol::after,
+    .menu-symbol span {
+      content: "";
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      border-radius: 999px;
+      background: currentColor;
+      transition: transform 180ms ease, top 180ms ease, opacity 180ms ease;
+    }
+
+    .menu-symbol::before {
+      top: 0;
+    }
+
+    .menu-symbol span {
+      top: 6px;
+    }
+
+    .menu-symbol::after {
+      top: 12px;
+    }
+
+    .icon-button.is-open .menu-symbol::before {
+      top: 6px;
+      transform: rotate(45deg);
+    }
+
+    .icon-button.is-open .menu-symbol span {
+      opacity: 0;
+    }
+
+    .icon-button.is-open .menu-symbol::after {
+      top: 6px;
+      transform: rotate(-45deg);
+    }
+
+    .icon-button svg,
+    .btn svg,
+    .service-card svg,
+    .contact-line svg,
+    .notice svg,
+    .process-step svg,
+    .footer-link svg {
+      width: 1.1rem;
+      height: 1.1rem;
+      flex: 0 0 auto;
+    }
+
+    .btn {
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
+      border: 1px solid transparent;
+      border-radius: var(--radius);
+      padding: 0.78rem 1rem;
+      font-weight: 750;
+      line-height: 1.1;
+      transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease, border-color 180ms ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      background: var(--blue-dark);
+      color: var(--white);
+      box-shadow: 0 12px 24px rgba(31, 70, 89, 0.16);
+    }
+
+    .btn-primary:hover {
+      background: #183747;
+    }
+
+    .btn-soft {
+      background: rgba(255, 255, 255, 0.82);
+      border-color: rgba(49, 94, 115, 0.18);
+      color: var(--blue-dark);
+    }
+
+    .btn-coral {
+      background: var(--coral);
+      color: #512d27;
+      border-color: rgba(184, 95, 78, 0.18);
+    }
+
+    .section-shell {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .hero {
+      position: relative;
+      min-height: 86svh;
+      display: grid;
+      align-items: center;
+      padding: 8.5rem 0 4rem;
+      overflow: hidden;
+      background:
+        linear-gradient(90deg, rgba(251, 253, 251, 0.98) 0%, rgba(251, 253, 251, 0.94) 38%, rgba(251, 253, 251, 0.55) 64%, rgba(251, 253, 251, 0.32) 100%),
+        url("assets/consulting-workspace.png") center right / cover no-repeat;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(223, 243, 237, 0.55), rgba(220, 238, 255, 0.45));
+      pointer-events: none;
+      mix-blend-mode: multiply;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      width: min(650px, calc(100% - 32px));
+      margin-left: max(16px, calc((100% - 1180px) / 2));
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 0 0 1rem;
+      color: var(--blue-dark);
+      font-weight: 800;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 30px;
+      height: 2px;
+      background: var(--coral);
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      margin-bottom: 1rem;
+      font-size: clamp(3.1rem, 7vw, 6.5rem);
+      line-height: 0.95;
+      letter-spacing: 0;
+    }
+
+    .hero-lede {
+      max-width: 590px;
+      color: #40565f;
+      font-size: clamp(1.05rem, 2vw, 1.28rem);
+      margin-bottom: 1.6rem;
+    }
+
+    .hero-actions,
+    .section-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      align-items: center;
+    }
+
+    .hero-points {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.7rem;
+      margin: 2.1rem 0 0;
+      max-width: 640px;
+    }
+
+    .hero-points div {
+      border: 1px solid rgba(49, 94, 115, 0.12);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.72);
+      padding: 0.9rem;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .hero-points dt {
+      font-size: 1.2rem;
+      font-weight: 850;
+      color: var(--blue-dark);
+    }
+
+    .hero-points dd {
+      margin: 0.1rem 0 0;
+      color: var(--muted);
+      font-size: 0.85rem;
+      line-height: 1.35;
+    }
+
+    .trust-band {
+      background: var(--white);
+      border-block: 1px solid var(--line);
+    }
+
+    .trust-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1px;
+      background: var(--line);
+    }
+
+    .trust-item {
+      min-height: 126px;
+      padding: 1.3rem;
+      background: var(--white);
+      display: grid;
+      align-content: center;
+      gap: 0.3rem;
+    }
+
+    .trust-item strong {
+      color: var(--blue-dark);
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      line-height: 1;
+    }
+
+    .trust-item span {
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 0.92rem;
+    }
+
+    section {
+      scroll-margin-top: 92px;
+    }
+
+    .section {
+      padding: 5.5rem 0;
+    }
+
+    .section-muted {
+      background: var(--soft);
+    }
+
+    .section-mint {
+      background: linear-gradient(180deg, #f6fbf9, var(--mint));
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: minmax(0, 0.8fr) minmax(260px, 0.45fr);
+      gap: 2rem;
+      align-items: end;
+      margin-bottom: 2.2rem;
+    }
+
+    .section-kicker {
+      color: var(--coral-dark);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.13em;
+      font-weight: 850;
+      margin-bottom: 0.7rem;
+    }
+
+    h2 {
+      color: var(--ink);
+      font-size: clamp(2rem, 4vw, 3.25rem);
+      line-height: 1;
+      letter-spacing: 0;
+      margin-bottom: 0;
+    }
+
+    .section-head p,
+    .about-copy p,
+    .faq-item p,
+    .service-card p,
+    .process-step p {
+      color: var(--muted);
+    }
+
+    .service-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .service-card {
+      min-height: 220px;
+      display: grid;
+      align-content: start;
+      gap: 0.9rem;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--white);
+      padding: 1.35rem;
+      box-shadow: var(--shadow-soft);
+      transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+    }
+
+    .service-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(126, 184, 170, 0.64);
+      box-shadow: var(--shadow);
+    }
+
+    .service-icon {
+      width: 44px;
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      border-radius: var(--radius);
+      color: var(--blue-dark);
+      background: var(--mint);
+    }
+
+    .service-card:nth-child(2n) .service-icon {
+      background: var(--sky);
+    }
+
+    .service-card:nth-child(3n) .service-icon {
+      background: var(--clay);
+    }
+
+    .service-card h3,
+    .process-step h3,
+    .about-list strong,
+    .faq-item h3 {
+      margin-bottom: 0.3rem;
+      line-height: 1.2;
+      font-size: 1.05rem;
+    }
+
+    .service-card p,
+    .process-step p,
+    .faq-item p {
+      margin-bottom: 0;
+      font-size: 0.95rem;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(320px, 0.55fr);
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .about-copy h2 {
+      margin-bottom: 1.1rem;
+    }
+
+    .about-list {
+      display: grid;
+      gap: 0.85rem;
+      margin: 1.6rem 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .about-list li {
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+      padding: 1rem;
+      border: 1px solid rgba(49, 94, 115, 0.12);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.72);
+    }
+
+    .about-list svg {
+      width: 1.15rem;
+      height: 1.15rem;
+      margin-top: 0.15rem;
+      color: var(--success);
+      flex: 0 0 auto;
+    }
+
+    .about-panel {
+      border-radius: var(--radius);
+      border: 1px solid rgba(49, 94, 115, 0.14);
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(223, 243, 237, 0.82)),
+        var(--mint);
+      padding: 1.3rem;
+      box-shadow: var(--shadow);
+    }
+
+    .about-panel-inner {
+      border: 1px solid rgba(49, 94, 115, 0.12);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.78);
+      padding: 1.2rem;
+    }
+
+    .quote {
+      margin: 0;
+      color: var(--blue-dark);
+      font-size: clamp(1.25rem, 2.5vw, 1.65rem);
+      line-height: 1.25;
+      font-weight: 800;
+    }
+
+    .quote-credit {
+      margin-top: 1.1rem;
+      color: var(--muted);
+      font-size: 0.9rem;
+      font-weight: 650;
+    }
+
+    .process-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .process-step {
+      position: relative;
+      border: 1px solid rgba(49, 94, 115, 0.14);
+      border-radius: var(--radius);
+      background: var(--white);
+      padding: 1.2rem;
+      min-height: 210px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .step-number {
+      width: 38px;
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      margin-bottom: 1rem;
+      border-radius: var(--radius);
+      background: var(--blue-dark);
+      color: var(--white);
+      font-weight: 850;
+      font-size: 0.92rem;
+    }
+
+    .testimonial-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .testimonial-card {
+      display: grid;
+      gap: 1rem;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--white);
+      padding: 1.25rem;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .stars {
+      color: #cb8b42;
+      letter-spacing: 0.08em;
+      font-size: 0.88rem;
+    }
+
+    .testimonial-card p {
+      color: #425960;
+      margin-bottom: 0;
+    }
+
+    .testimonial-card strong {
+      color: var(--blue-dark);
+      font-size: 0.92rem;
+    }
+
+    .faq-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .faq-item {
+      border: 1px solid rgba(49, 94, 115, 0.14);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.75);
+      padding: 1.2rem;
+    }
+
+    .contact-section {
+      padding: 5.5rem 0;
+      background:
+        linear-gradient(135deg, rgba(220, 238, 255, 0.78), rgba(223, 243, 237, 0.72)),
+        var(--sky);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(340px, 0.7fr);
+      gap: 2rem;
+      align-items: start;
+    }
+
+    .contact-copy {
+      position: sticky;
+      top: 102px;
+      padding-top: 0.4rem;
+    }
+
+    .contact-copy h2 {
+      margin-bottom: 1rem;
+    }
+
+    .contact-copy p {
+      color: #435a63;
+      max-width: 560px;
+    }
+
+    .contact-lines {
+      display: grid;
+      gap: 0.75rem;
+      margin-top: 1.6rem;
+    }
+
+    .contact-line {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      color: var(--blue-dark);
+      font-weight: 750;
+    }
+
+    .contact-line span {
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .contact-form {
+      border: 1px solid rgba(49, 94, 115, 0.14);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.88);
+      box-shadow: var(--shadow);
+      padding: 1.35rem;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .field {
+      display: grid;
+      gap: 0.4rem;
+    }
+
+    .field-full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      color: #314952;
+      font-size: 0.9rem;
+      font-weight: 750;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid #cfdeda;
+      border-radius: var(--radius);
+      background: var(--white);
+      color: var(--ink);
+      padding: 0.82rem 0.9rem;
+      outline: none;
+      transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
+    }
+
+    textarea {
+      min-height: 132px;
+      resize: vertical;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 4px rgba(49, 94, 115, 0.12);
+    }
+
+    [aria-invalid="true"] {
+      border-color: var(--danger);
+    }
+
+    .field-error {
+      min-height: 1.15rem;
+      color: var(--danger);
+      font-size: 0.78rem;
+      font-weight: 650;
+      margin: 0;
+    }
+
+    .honeypot {
+      position: absolute;
+      left: -9999px;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .form-footer {
+      display: grid;
+      gap: 0.8rem;
+      margin-top: 1rem;
+    }
+
+    .form-footer .btn {
+      width: 100%;
+    }
+
+    .notice {
+      display: none;
+      align-items: flex-start;
+      gap: 0.7rem;
+      border-radius: var(--radius);
+      padding: 0.85rem;
+      font-size: 0.9rem;
+      font-weight: 650;
+    }
+
+    .notice.show {
+      display: flex;
+    }
+
+    .notice.success {
+      background: rgba(223, 243, 237, 0.92);
+      color: var(--success);
+    }
+
+    .notice.error {
+      background: #fff1ef;
+      color: var(--danger);
+    }
+
+    .success-state {
+      display: none;
+      text-align: center;
+      padding: 2.2rem 1rem;
+    }
+
+    .success-state.show {
+      display: block;
+    }
+
+    .success-icon {
+      width: 62px;
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      margin: 0 auto 1rem;
+      border-radius: var(--radius);
+      background: var(--mint);
+      color: var(--success);
+    }
+
+    .success-icon svg {
+      width: 1.7rem;
+      height: 1.7rem;
+    }
+
+    .submit-spinner {
+      width: 1.05rem;
+      height: 1.05rem;
+      border: 2px solid rgba(255, 255, 255, 0.45);
+      border-top-color: var(--white);
+      border-radius: 999px;
+      animation: spin 700ms linear infinite;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .site-footer {
+      background: #1e333c;
+      color: rgba(255, 255, 255, 0.78);
+      padding: 2rem 0;
+    }
+
+    .footer-grid {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      font-size: 0.92rem;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .footer-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .float-whatsapp {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 40;
+      width: 54px;
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      border-radius: var(--radius);
+      background: #2f8f69;
+      color: var(--white);
+      box-shadow: 0 16px 34px rgba(47, 143, 105, 0.26);
+    }
+
+    .float-whatsapp svg {
+      width: 1.35rem;
+      height: 1.35rem;
+    }
+
+    .float-whatsapp .fallback-label {
+      position: absolute;
+      font-size: 0.74rem;
+      font-weight: 850;
+      letter-spacing: 0;
+    }
+
+    .float-whatsapp svg + .fallback-label {
+      display: none;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 520ms ease, transform 520ms ease;
+    }
+
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 1ms !important;
+        transition-duration: 1ms !important;
+      }
+
+      .reveal {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    @media (max-width: 920px) {
+      .icon-button {
+        display: grid;
+      }
+
+      .nav-links {
+        position: fixed;
+        inset: 74px 0 auto;
+        display: none;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+        padding: 0.8rem 16px 1rem;
+        background: rgba(251, 253, 251, 0.98);
+        border-bottom: 1px solid var(--line);
+        box-shadow: var(--shadow-soft);
+      }
+
+      .nav-links.open {
+        display: flex;
+      }
+
+      .nav-links a {
+        padding: 0.9rem 0;
+        border-bottom: 1px solid rgba(216, 230, 226, 0.72);
+      }
+
+      .nav-actions .btn {
+        display: none;
+      }
+
+      .hero {
+        min-height: auto;
+        padding: 7.5rem 0 4rem;
+        background:
+          linear-gradient(180deg, rgba(251, 253, 251, 0.98) 0%, rgba(251, 253, 251, 0.92) 48%, rgba(251, 253, 251, 0.76) 100%),
+          url("assets/consulting-workspace.png") center bottom / cover no-repeat;
+      }
+
+      .hero-content {
+        margin-inline: auto;
+      }
+
+      .hero-points,
+      .trust-grid,
+      .service-grid,
+      .process-grid,
+      .testimonial-grid,
+      .faq-grid,
+      .section-head,
+      .about-grid,
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .contact-copy {
+        position: static;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .nav-shell,
+      .section-shell,
+      .footer-grid {
+        width: min(100% - 24px, 1180px);
+      }
+
+      .brand-copy strong {
+        font-size: 0.9rem;
+      }
+
+      .brand-copy span {
+        display: none;
+      }
+
+      h1 {
+        font-size: clamp(2.75rem, 17vw, 4.7rem);
+      }
+
+      .hero-actions .btn,
+      .section-actions .btn {
+        width: 100%;
+      }
+
+      .hero-points {
+        grid-template-columns: 1fr;
+      }
+
+      .section,
+      .contact-section {
+        padding: 4rem 0;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="nav-shell">
+      <a class="brand" href="#top" aria-label="Shree Raj and Co. home">
+        <span class="brand-mark">SR</span>
+        <span class="brand-copy">
+          <strong>Shree Raj &amp; Co.</strong>
+          <span>Tax Consultants</span>
+        </span>
+      </a>
+
+      <nav class="nav-links" id="siteNav" aria-label="Primary navigation">
+        <a href="#services">Services</a>
+        <a href="#about">About</a>
+        <a href="#process">Process</a>
+        <a href="#faq">FAQ</a>
+        <a href="#contact">Contact</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a class="btn btn-primary" href="#contact">
+          <i data-lucide="calendar-check" aria-hidden="true"></i>
+          Consult Now
+        </a>
+        <button class="icon-button" type="button" id="menuToggle" aria-label="Open navigation" aria-controls="siteNav" aria-expanded="false">
+          <span class="menu-symbol" aria-hidden="true"><span></span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="top" aria-label="Shree Raj and Co. tax consulting">
+      <div class="hero-content reveal">
+        <p class="eyebrow">Vadodara tax consultants</p>
+        <h1>Shree Raj &amp; Co.</h1>
+        <p class="hero-lede">Calm, accurate tax and compliance support for individuals, professionals, and growing businesses.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#contact">
+            <i data-lucide="send" aria-hidden="true"></i>
+            Start an Enquiry
+          </a>
+          <a class="btn btn-soft" href="tel:+919426536855">
+            <i data-lucide="phone" aria-hidden="true"></i>
+            +91 94265 36855
+          </a>
+        </div>
+        <dl class="hero-points" aria-label="Practice highlights">
+          <div>
+            <dt>ITR</dt>
+            <dd>Individual and business returns</dd>
+          </div>
+          <div>
+            <dt>GST</dt>
+            <dd>Filing, returns, and notices</dd>
+          </div>
+          <div>
+            <dt>Setup</dt>
+            <dd>Registration and compliance</dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+    <div class="trust-band" aria-label="Firm highlights">
+      <div class="section-shell trust-grid">
+        <div class="trust-item">
+          <strong>24h</strong>
+          <span>Usual first response</span>
+        </div>
+        <div class="trust-item">
+          <strong>1:1</strong>
+          <span>Direct consultant support</span>
+        </div>
+        <div class="trust-item">
+          <strong>GST</strong>
+          <span>Monthly and quarterly compliance</span>
+        </div>
+        <div class="trust-item">
+          <strong>ITR</strong>
+          <span>Clean return preparation</span>
+        </div>
+      </div>
+    </div>
+
+    <section class="section section-muted" id="services">
+      <div class="section-shell">
+        <div class="section-head reveal">
+          <div>
+            <p class="section-kicker">Services</p>
+            <h2>Everything your compliance desk needs.</h2>
+          </div>
+          <p>Choose focused help for one filing, or keep your business compliance running through the year.</p>
+        </div>
+
+        <div class="service-grid">
+          <article class="service-card reveal">
+            <span class="service-icon"><i data-lucide="file-text" aria-hidden="true"></i></span>
+            <h3>Income Tax Returns</h3>
+            <p>ITR preparation for salaried taxpayers, professionals, proprietors, firms, and small companies.</p>
+          </article>
+          <article class="service-card reveal">
+            <span class="service-icon"><i data-lucide="receipt-text" aria-hidden="true"></i></span>
+            <h3>GST Filing</h3>
+            <p>GST registration, return filing, reconciliation, input credit checks, and compliance calendars.</p>
+          </article>
+          <article class="service-card reveal">
+            <span class="service-icon"><i data-lucide="building-2" aria-hidden="true"></i></span>
+            <h3>Business Setup</h3>
+            <p>Entity registration, PAN, TAN, GST, shop act support, and practical first-month compliance.</p>
+          </article>
+          <article class="service-card reveal">
+            <span class="service-icon"><i data-lucide="shield-check" aria-hidden="true"></i></span>
+            <h3>Tax Notices</h3>
+            <p>Response drafting, document review, and guidance for scrutiny, demand, and mismatch notices.</p>
+          </article>
+          <article class="service-card reveal">
+            <span class="service-icon"><i data-lucide="landmark" aria-hidden="true"></i></span>
+            <h3>Accounting Support</h3>
+            <p>Books review, ledger cleanup, profit and loss checks, and year-end preparation.</p>
+          </article>
+          <article class="service-card reveal">
+            <span class="service-icon"><i data-lucide="chart-no-axes-combined" aria-hidden="true"></i></span>
+            <h3>Advisory</h3>
+            <p>Tax planning, compliance strategy, cashflow-aware filing priorities, and documentation systems.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-mint" id="about">
+      <div class="section-shell about-grid">
+        <div class="about-copy reveal">
+          <p class="section-kicker">About</p>
+          <h2>Clear answers, careful filings, fewer surprises.</h2>
+          <p>Shree Raj &amp; Co. works with clients who want dependable tax help without confusion. The firm keeps filings organized, explains the practical choices, and responds with the details clients need to move forward.</p>
+          <ul class="about-list">
+            <li>
+              <i data-lucide="check-circle-2" aria-hidden="true"></i>
+              <span><strong>Organized documentation</strong><br>Requirements are mapped before filing so missing details do not slow the work.</span>
+            </li>
+            <li>
+              <i data-lucide="check-circle-2" aria-hidden="true"></i>
+              <span><strong>Plain-language guidance</strong><br>Tax positions, notices, and compliance dates are explained without needless jargon.</span>
+            </li>
+            <li>
+              <i data-lucide="check-circle-2" aria-hidden="true"></i>
+              <span><strong>Business-friendly cadence</strong><br>Monthly and quarterly work is handled with predictable reminders and review points.</span>
+            </li>
+          </ul>
+        </div>
+
+        <aside class="about-panel reveal" aria-label="Client promise">
+          <div class="about-panel-inner">
+            <p class="quote">"Tax work should feel precise, timely, and calm from the first conversation."</p>
+            <p class="quote-credit">Shree Raj &amp; Co. approach</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section" id="process">
+      <div class="section-shell">
+        <div class="section-head reveal">
+          <div>
+            <p class="section-kicker">Process</p>
+            <h2>Simple steps from enquiry to completion.</h2>
+          </div>
+          <p>Each engagement starts with the right context, then moves through review, filing, and confirmation.</p>
+        </div>
+
+        <div class="process-grid">
+          <article class="process-step reveal">
+            <span class="step-number">01</span>
+            <h3>Review</h3>
+            <p>Share the service needed, deadlines, and current documents.</p>
+          </article>
+          <article class="process-step reveal">
+            <span class="step-number">02</span>
+            <h3>Prepare</h3>
+            <p>Data is checked, calculations are prepared, and gaps are listed clearly.</p>
+          </article>
+          <article class="process-step reveal">
+            <span class="step-number">03</span>
+            <h3>File</h3>
+            <p>Returns, registrations, or responses are finalized after approval.</p>
+          </article>
+          <article class="process-step reveal">
+            <span class="step-number">04</span>
+            <h3>Track</h3>
+            <p>Acknowledgements, due dates, and next actions are shared after completion.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-muted" aria-label="Client testimonials">
+      <div class="section-shell">
+        <div class="section-head reveal">
+          <div>
+            <p class="section-kicker">Clients</p>
+            <h2>Trusted for practical tax support.</h2>
+          </div>
+          <p>Clients come for filing help, then stay for reliable compliance habits.</p>
+        </div>
+
+        <div class="testimonial-grid">
+          <article class="testimonial-card reveal">
+            <div class="stars" aria-label="Five star rating">*****</div>
+            <p>"Professional, quick, and very clear about every document needed."</p>
+            <strong>Raj Patel</strong>
+          </article>
+          <article class="testimonial-card reveal">
+            <div class="stars" aria-label="Five star rating">*****</div>
+            <p>"GST filing became much easier once the monthly process was organized."</p>
+            <strong>Mehul Shah</strong>
+          </article>
+          <article class="testimonial-card reveal">
+            <div class="stars" aria-label="Five star rating">*****</div>
+            <p>"Helpful notice support, calm communication, and proper follow-up."</p>
+            <strong>Priya Desai</strong>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="faq">
+      <div class="section-shell">
+        <div class="section-head reveal">
+          <div>
+            <p class="section-kicker">FAQ</p>
+            <h2>Common questions before starting.</h2>
+          </div>
+          <p>Helpful details for individuals, proprietors, and businesses planning a filing or compliance review.</p>
+        </div>
+
+        <div class="faq-grid">
+          <article class="faq-item reveal">
+            <h3>Do you handle both personal and business tax returns?</h3>
+            <p>Yes. The firm supports salaried individuals, professionals, proprietorships, partnerships, and small companies.</p>
+          </article>
+          <article class="faq-item reveal">
+            <h3>Can you help with a GST notice?</h3>
+            <p>Yes. Share the notice, portal details, and available records so the response path can be reviewed.</p>
+          </article>
+          <article class="faq-item reveal">
+            <h3>What documents are usually needed for ITR?</h3>
+            <p>Form 16, AIS/TIS, bank statements, investment proofs, capital gain details, and business records where applicable.</p>
+          </article>
+          <article class="faq-item reveal">
+            <h3>Can new businesses get registration support?</h3>
+            <p>Yes. Registration and first compliance steps can be planned together for a cleaner launch.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact-section" id="contact">
+      <div class="section-shell contact-grid">
+        <div class="contact-copy reveal">
+          <p class="section-kicker">Contact</p>
+          <h2>Tell us what needs attention.</h2>
+          <p>Share your tax, GST, registration, or notice requirement. Shree Raj &amp; Co. will respond with the next practical step.</p>
+          <div class="contact-lines">
+            <a class="contact-line" href="tel:+919426536855">
+              <i data-lucide="phone" aria-hidden="true"></i>
+              +91 94265 36855
+            </a>
+            <a class="contact-line" href="mailto:shreerajco@yahoo.com">
+              <i data-lucide="mail" aria-hidden="true"></i>
+              shreerajco@yahoo.com
+            </a>
+            <a class="contact-line" href="https://wa.me/919426536855">
+              <i data-lucide="message-circle" aria-hidden="true"></i>
+              WhatsApp
+            </a>
+            <div class="contact-line">
+              <i data-lucide="map-pin" aria-hidden="true"></i>
+              <span>Vadodara, Gujarat</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-form reveal">
+          <form id="contactForm" novalidate>
+            <div class="honeypot" aria-hidden="true">
+              <label for="website">Website</label>
+              <input id="website" name="website" type="text" tabindex="-1" autocomplete="off">
+            </div>
+
+            <div class="form-grid">
+              <div class="field" data-field="name">
+                <label for="name">Full name</label>
+                <input id="name" name="name" type="text" autocomplete="name" placeholder="Ramesh Patel" aria-describedby="name-error">
+                <p class="field-error" id="name-error"></p>
+              </div>
+              <div class="field" data-field="email">
+                <label for="email">Email</label>
+                <input id="email" name="email" type="email" autocomplete="email" placeholder="ramesh@example.com" aria-describedby="email-error">
+                <p class="field-error" id="email-error"></p>
+              </div>
+              <div class="field" data-field="phone">
+                <label for="phone">Mobile number</label>
+                <input id="phone" name="phone" type="tel" inputmode="numeric" autocomplete="tel" placeholder="9876543210" aria-describedby="phone-error">
+                <p class="field-error" id="phone-error"></p>
+              </div>
+              <div class="field" data-field="service">
+                <label for="service">Service</label>
+                <select id="service" name="service" aria-describedby="service-error">
+                  <option value="">Select a service</option>
+                  <option value="Income Tax / ITR Filing">Income Tax / ITR Filing</option>
+                  <option value="GST Filing & Compliance">GST Filing &amp; Compliance</option>
+                  <option value="Business Registration">Business Registration</option>
+                  <option value="Tax Notice / Scrutiny">Tax Notice / Scrutiny</option>
+                  <option value="Accounting Support">Accounting Support</option>
+                  <option value="Other">Other</option>
+                </select>
+                <p class="field-error" id="service-error"></p>
+              </div>
+              <div class="field field-full" data-field="message">
+                <label for="message">Message</label>
+                <textarea id="message" name="message" placeholder="Briefly describe the help you need..." aria-describedby="message-error"></textarea>
+                <p class="field-error" id="message-error"></p>
+              </div>
+            </div>
+
+            <div class="form-footer">
+              <button class="btn btn-primary" type="submit" id="submitButton">
+                <i data-lucide="send" aria-hidden="true"></i>
+                <span>Send Enquiry</span>
+              </button>
+              <div class="notice" id="formNotice" aria-live="polite"></div>
+            </div>
+          </form>
+
+          <div class="success-state" id="successState" aria-live="polite">
+            <span class="success-icon"><i data-lucide="check" aria-hidden="true"></i></span>
+            <h3>Enquiry received</h3>
+            <p>Thank you. Shree Raj &amp; Co. will contact you shortly.</p>
+            <button class="btn btn-soft" type="button" id="sendAnother">
+              <i data-lucide="refresh-cw" aria-hidden="true"></i>
+              Send Another
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <span>&copy; <span id="year">2026</span> Shree Raj &amp; Co. All rights reserved.</span>
+      <div class="footer-links">
+        <a class="footer-link" href="tel:+919426536855"><i data-lucide="phone" aria-hidden="true"></i>Call</a>
+        <a class="footer-link" href="mailto:shreerajco@yahoo.com"><i data-lucide="mail" aria-hidden="true"></i>Email</a>
+        <a class="footer-link" href="#top"><i data-lucide="arrow-up" aria-hidden="true"></i>Top</a>
+      </div>
+    </div>
+  </footer>
+
+  <a class="float-whatsapp" href="https://wa.me/919426536855" aria-label="Chat on WhatsApp">
+    <i data-lucide="message-circle" aria-hidden="true"></i>
+    <span class="fallback-label" aria-hidden="true">WA</span>
+  </a>
+
+  <script>
+    const nav = document.getElementById("siteNav");
+    const menuToggle = document.getElementById("menuToggle");
+    const contactForm = document.getElementById("contactForm");
+    const successState = document.getElementById("successState");
+    const submitButton = document.getElementById("submitButton");
+    const formNotice = document.getElementById("formNotice");
+    const sendAnother = document.getElementById("sendAnother");
+    const currentYear = document.getElementById("year");
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const serviceOptions = new Set([
+      "Income Tax / ITR Filing",
+      "GST Filing & Compliance",
+      "Business Registration",
+      "Tax Notice / Scrutiny",
+      "Accounting Support",
+      "Other"
+    ]);
+
+    const configuredApi = (
+      window.SHREE_RAJ_CONFIG?.apiBase ||
+      document.querySelector('meta[name="contact-api"]')?.content ||
+      ""
+    ).trim();
+    const localApi = ["localhost", "127.0.0.1"].includes(window.location.hostname)
+      ? "http://localhost:3000"
+      : "";
+    const apiBase = (configuredApi || localApi).replace(/\/+$/, "");
+
+    function createIcons() {
+      if (window.lucide) {
+        window.lucide.createIcons({ attrs: { "stroke-width": 1.8 } });
+      }
+    }
+
+    function setMenu(open) {
+      nav.classList.toggle("open", open);
+      document.body.classList.toggle("menu-open", open);
+      menuToggle.classList.toggle("is-open", open);
+      menuToggle.setAttribute("aria-expanded", String(open));
+      menuToggle.setAttribute("aria-label", open ? "Close navigation" : "Open navigation");
+    }
+
+    function field(id) {
+      return document.getElementById(id);
+    }
+
+    function setFieldError(id, message) {
+      const control = field(id);
+      const error = field(`${id}-error`);
+      control.setAttribute("aria-invalid", message ? "true" : "false");
+      error.textContent = message || "";
+    }
+
+    function getPayload() {
+      return {
+        name: field("name").value.trim(),
+        email: field("email").value.trim(),
+        phone: field("phone").value.trim(),
+        service: field("service").value,
+        message: field("message").value.trim(),
+        website: field("website").value.trim()
+      };
+    }
+
+    function validate(payload) {
+      let valid = true;
+      const normalizedPhone = payload.phone.replace(/[^\d]/g, "").replace(/^91(?=\d{10}$)/, "");
+
+      if (payload.name.length < 2 || payload.name.length > 100) {
+        setFieldError("name", "Enter a valid full name.");
+        valid = false;
+      } else {
+        setFieldError("name", "");
+      }
+
+      if (!emailPattern.test(payload.email)) {
+        setFieldError("email", "Enter a valid email address.");
+        valid = false;
+      } else {
+        setFieldError("email", "");
+      }
+
+      if (payload.phone && !/^[6-9]\d{9}$/.test(normalizedPhone)) {
+        setFieldError("phone", "Enter a valid 10-digit Indian mobile number.");
+        valid = false;
+      } else {
+        setFieldError("phone", "");
+      }
+
+      if (!serviceOptions.has(payload.service)) {
+        setFieldError("service", "Choose the service you need.");
+        valid = false;
+      } else {
+        setFieldError("service", "");
+      }
+
+      if (payload.message.length < 10 || payload.message.length > 1200) {
+        setFieldError("message", "Message must be 10 to 1200 characters.");
+        valid = false;
+      } else {
+        setFieldError("message", "");
+      }
+
+      return valid;
+    }
+
+    function setNotice(message, type) {
+      formNotice.className = message ? `notice show ${type}` : "notice";
+      formNotice.innerHTML = message
+        ? `<i data-lucide="${type === "success" ? "check-circle-2" : "circle-alert"}" aria-hidden="true"></i><span>${message}</span>`
+        : "";
+      createIcons();
+    }
+
+    function setSubmitting(isSubmitting) {
+      submitButton.disabled = isSubmitting;
+      submitButton.innerHTML = isSubmitting
+        ? '<span class="submit-spinner" aria-hidden="true"></span><span>Sending</span>'
+        : '<i data-lucide="send" aria-hidden="true"></i><span>Send Enquiry</span>';
+      createIcons();
+    }
+
+    async function sendToApi(payload) {
+      const paths = ["/api/contact", "/contact"];
+      let lastError;
+
+      for (const path of paths) {
+        try {
+          const response = await fetch(`${apiBase}${path}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          });
+
+          if (response.status === 404 && path === "/api/contact") {
+            continue;
+          }
+
+          const data = await response.json().catch(() => ({}));
+
+          if (!response.ok || !data.success) {
+            const validationMessage = Array.isArray(data.errors) && data.errors[0]?.msg
+              ? data.errors[0].msg
+              : data.error;
+            throw new Error(validationMessage || "The enquiry could not be sent.");
+          }
+
+          return data;
+        } catch (error) {
+          lastError = error;
+        }
+      }
+
+      throw lastError || new Error("The enquiry could not be sent.");
+    }
+
+    function openEmailDraft(payload) {
+      const subject = encodeURIComponent(`Website enquiry: ${payload.service}`);
+      const body = encodeURIComponent(
+        `Name: ${payload.name}\nEmail: ${payload.email}\nPhone: ${payload.phone || "Not shared"}\nService: ${payload.service}\n\nMessage:\n${payload.message}`
+      );
+      window.location.href = `mailto:shreerajco@yahoo.com?subject=${subject}&body=${body}`;
+    }
+
+    function showSuccess() {
+      contactForm.classList.add("hidden");
+      successState.classList.add("show");
+      createIcons();
+    }
+
+    function resetForm() {
+      contactForm.reset();
+      ["name", "email", "phone", "service", "message"].forEach((id) => setFieldError(id, ""));
+      setNotice("", "success");
+      successState.classList.remove("show");
+      contactForm.classList.remove("hidden");
+      field("name").focus();
+    }
+
+    menuToggle.addEventListener("click", () => setMenu(!nav.classList.contains("open")));
+    nav.addEventListener("click", (event) => {
+      if (event.target.closest("a")) {
+        setMenu(false);
+      }
+    });
+
+    contactForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const payload = getPayload();
+
+      if (payload.website) {
+        return;
+      }
+
+      if (!validate(payload)) {
+        setNotice("Please review the highlighted fields.", "error");
+        return;
+      }
+
+      setSubmitting(true);
+      setNotice("", "success");
+
+      try {
+        if (apiBase) {
+          await sendToApi(payload);
+          showSuccess();
+        } else {
+          openEmailDraft(payload);
+          setNotice("Opening your email draft with the enquiry details.", "success");
+        }
+      } catch (error) {
+        setNotice(error.message || "Please call or WhatsApp us directly.", "error");
+      } finally {
+        setSubmitting(false);
+      }
+    });
+
+    sendAnother.addEventListener("click", resetForm);
+
+    if (currentYear) {
+      currentYear.textContent = String(new Date().getFullYear());
+    }
+
+    const revealItems = document.querySelectorAll(".reveal");
+    if ("IntersectionObserver" in window) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12 });
+
+      revealItems.forEach((item) => observer.observe(item));
+    } else {
+      revealItems.forEach((item) => item.classList.add("is-visible"));
+    }
+
+    window.addEventListener("load", createIcons);
+  </script>
+</body>
+</html>

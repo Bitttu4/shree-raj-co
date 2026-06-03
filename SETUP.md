@@ -1,145 +1,145 @@
-# Shree Raj & Co. — Contact Form Backend Setup
+# Setup and Deployment
 
-## What's included
+This project has two deployable parts:
 
+- Static website: `index.html`, `assets/`, and `raju_mama.html`, hosted on GitHub Pages or a custom domain.
+- Contact API: `server/`, hosted on a Node-compatible service.
+
+GitHub Pages cannot run an Express backend, so the API must be deployed separately if you want direct form submission without opening an email draft.
+
+## 1. Run the Website Locally
+
+From the repository root:
+
+```bash
+python -m http.server 5500
 ```
-shree-raj-co/
-├── raju_mama.html          ← Updated frontend (drop into your repo)
-└── server/
-    ├── server.js           ← Express server (email + Firestore)
-    ├── package.json
-    └── .env.example        ← Copy this to .env and fill in
+
+Open:
+
+```text
+http://localhost:5500
 ```
 
----
+The frontend automatically uses `http://localhost:3000` as the API while running locally.
 
-## STEP 1 — Set up Firebase (Free)
-
-1. Go to https://console.firebase.google.com
-2. Click **Add Project** → name it `shree-raj-co` → Create
-3. In the left sidebar → **Firestore Database** → Create database → Start in **test mode**
-4. Go to **Project Settings** (gear icon) → **Service accounts** tab
-5. Click **Generate new private key** → download the JSON file
-6. Open that JSON, copy the entire contents as a single line — you'll use it as `FIREBASE_SERVICE_ACCOUNT` in `.env`
-
----
-
-## STEP 2 — Get Gmail App Password
-
-> **Important**: Use a Gmail account, not Yahoo. Yahoo SMTP needs different setup.
-> You can use a free Gmail account just for sending emails.
-
-1. Go to https://myaccount.google.com/security
-2. Enable **2-Step Verification** (required)
-3. Go to https://myaccount.google.com/apppasswords
-4. Select **Mail** → **Other (Custom)** → name it "Shree Raj Website"
-5. Copy the 16-character password → use as `EMAIL_PASS` in `.env`
-
----
-
-## STEP 3 — Create your .env file
+## 2. Run the API Locally
 
 ```bash
 cd server
-cp .env.example .env
-```
-
-Edit `.env`:
-
-```env
-EMAIL_USER=your-gmail@gmail.com
-EMAIL_PASS=abcd efgh ijkl mnop   # The 16-char app password
-OWNER_EMAIL=shreerajco@yahoo.com  # Where you receive notifications
-FIREBASE_SERVICE_ACCOUNT={"type":"service_account","project_id":"shree-raj-co",...}
-ALLOWED_ORIGIN=https://yourusername.github.io
-```
-
-> Paste the entire Firebase JSON as one line for `FIREBASE_SERVICE_ACCOUNT`.
-
----
-
-## STEP 4 — Run locally to test
-
-```bash
-cd server
+copy env.example .env
 npm install
 npm run dev
 ```
 
-Open a new terminal and test:
+Open the health check:
+
+```text
+http://localhost:3000/api/health
+```
+
+## 3. Configure API Environment
+
+Edit `server/.env`.
+
+Required for email notifications:
+
+```env
+EMAIL_SERVICE=gmail
+EMAIL_USER=your-gmail@gmail.com
+EMAIL_PASS=your-16-character-app-password
+OWNER_EMAIL=shreerajco@yahoo.com
+```
+
+Allowed origins:
+
+```env
+ALLOWED_ORIGINS=http://localhost:5500,https://yourusername.github.io,https://www.yourdomain.com
+```
+
+Optional Firestore storage:
+
+```env
+FIREBASE_SERVICE_ACCOUNT={"type":"service_account","project_id":"..."}
+```
+
+If Firebase is not configured, the API writes submissions to `server/data/contact-submissions.jsonl`.
+
+## 4. Test the API
 
 ```bash
-curl -X POST http://localhost:3000/contact \
-  -H "Content-Type: application/json" \
-  -d '{"name":"Test","email":"test@test.com","message":"Hello from test","website":""}'
+curl -X POST http://localhost:3000/api/contact ^
+  -H "Content-Type: application/json" ^
+  -d "{\"name\":\"Test Client\",\"email\":\"test@example.com\",\"phone\":\"9876543210\",\"service\":\"Income Tax / ITR Filing\",\"message\":\"I need help filing my return.\",\"website\":\"\"}"
 ```
 
-You should receive an email at `OWNER_EMAIL`. ✅
+Expected result:
 
----
-
-## STEP 5 — Deploy to Railway (Free tier, 5 mins)
-
-1. Go to https://railway.app → Sign in with GitHub
-2. Click **New Project** → **Deploy from GitHub repo**
-3. Select your `shree-raj-co` repo → set **Root Directory** to `server`
-4. Click **Variables** → add all your `.env` values there
-5. Railway auto-deploys. Copy your public URL (e.g. `https://shree-raj-co-production.up.railway.app`)
-
----
-
-## STEP 6 — Update the frontend
-
-In `raju_mama.html`, find this line near the bottom:
-
-```js
-const SERVER_URL = "http://localhost:3000";
+```json
+{
+  "success": true,
+  "message": "Enquiry received."
+}
 ```
 
-Change it to your Railway URL:
+## 5. Deploy the Static Site to GitHub Pages
 
-```js
-const SERVER_URL = "https://shree-raj-co-production.up.railway.app";
+1. Push the repository to GitHub.
+2. Go to repository settings.
+3. Open Pages.
+4. Set the Pages source to GitHub Actions.
+5. Push to the `main` branch.
+
+The workflow at `.github/workflows/pages.yml` publishes only the static website files.
+
+## 6. Deploy the API
+
+Deploy the `server/` directory to a Node host.
+
+Use these commands:
+
+```text
+Build command: npm install
+Start command: npm start
 ```
 
-Commit & push `raju_mama.html` to your GitHub repo. Done! 🎉
+Set all environment variables from `server/env.example` in the hosting dashboard.
 
----
+After deployment, confirm:
 
-## Features Summary
+```text
+https://your-api-domain.example/api/health
+```
 
-| Feature | How it's done |
-|---------|--------------|
-| ✅ Form validation | Client-side JS + server-side express-validator |
-| ✅ Spam prevention | Honeypot field + rate limiting (5/hr per IP) |
-| ✅ Email to owner | Nodemailer via Gmail SMTP, HTML email |
-| ✅ Auto-reply to user | Confirmation email sent to submitter |
-| ✅ Store submissions | Firebase Firestore (free, searchable) |
-| ✅ Service dropdown | Added Income Tax, GST, Business Setup options |
-| ✅ Loading state | Spinner + disabled button during submit |
-| ✅ Success screen | Replaces form with thank you state |
-| ✅ Error toast | User-friendly error messages |
+## 7. Connect the Website to the API
 
----
+In `index.html`, update:
 
-## View submissions in Firebase
+```html
+<meta name="contact-api" content="">
+```
 
-1. Go to https://console.firebase.google.com
-2. Your project → Firestore Database
-3. Look for the `contact_submissions` collection
-4. Each document = one form submission with name, email, message, timestamp
+to:
 
----
+```html
+<meta name="contact-api" content="https://your-api-domain.example">
+```
 
-## Troubleshooting
+Commit and push the change. The next GitHub Pages deployment will use the live API.
 
-**Emails not sending?**
-- Make sure you're using a Gmail App Password, not your regular password
-- Yahoo SMTP needs different config — easier to use a Gmail account for sending
+## 8. Use a Custom Domain
 
-**CORS error in browser?**
-- Make sure `ALLOWED_ORIGIN` in `.env` matches your GitHub Pages URL exactly
+Create a root `CNAME` file with only the domain:
 
-**Firebase error?**
-- Paste the entire service account JSON as a single line in `.env`
-- Make sure Firestore is created in the Firebase console first
+```text
+www.shreerajco.com
+```
+
+Commit and push it. The workflow automatically includes `CNAME` when it exists.
+
+In GitHub Pages settings, add the same custom domain. Then configure DNS with your domain provider:
+
+- For `www`, create a CNAME record pointing to `yourusername.github.io`.
+- For an apex/root domain, use GitHub Pages A records in your DNS provider.
+
+Keep backend secrets out of GitHub. Only the API URL belongs in `index.html`.
