@@ -1476,10 +1476,7 @@
       document.querySelector('meta[name="contact-api"]')?.content ||
       ""
     ).trim();
-    const localApi = ["localhost", "127.0.0.1"].includes(window.location.hostname)
-      ? "http://localhost:3000"
-      : "";
-    const apiBase = (configuredApi || localApi).replace(/\/+$/, "");
+    const apiBase = configuredApi.replace(/\/+$/, "");
 
     function createIcons() {
       if (window.lucide) {

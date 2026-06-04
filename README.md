@@ -1,81 +1,59 @@
 # Shree Raj & Co. Website
 
-Pastel, responsive website for Shree Raj & Co., a tax consulting firm in Vadodara. The frontend is static and deploys to GitHub Pages. The contact form can connect to the included Express API or fall back to a prefilled email draft when the API URL is not configured.
+Pastel, responsive static website for Shree Raj & Co., designed to deploy on GitHub Pages. No local machine is needed for hosting.
 
-## Features
+## GitHub Pages Deployment
 
-- Clean responsive UI with local visual asset
-- Services, about, process, testimonials, FAQ, and contact sections
-- Accessible form validation and mobile navigation
-- Express contact API with rate limiting, CORS controls, validation, email notifications, and storage fallback
-- GitHub Pages workflow for static deployment
+1. Push this repository to GitHub.
+2. In the GitHub repo, open `Settings` -> `Pages`.
+3. Set `Source` to `GitHub Actions`.
+4. Push to the `main` branch.
+5. Open the Actions tab and wait for `Deploy to GitHub Pages` to finish.
 
-## Project Structure
+The workflow at `.github/workflows/pages.yml` publishes only:
 
 ```text
-.
-├── index.html
-├── raju_mama.html
-├── assets/
-│   └── consulting-workspace.png
-├── server/
-│   ├── server.js
-│   ├── package.json
-│   └── env.example
-├── .github/workflows/pages.yml
-├── .nojekyll
-├── SETUP.md
-└── README.md
+index.html
+404.html
+raju_mama.html
+.nojekyll
+assets/
+CNAME, if present
 ```
 
-## Local Frontend
+The `server/` folder is intentionally not deployed to GitHub Pages because Pages can host only static files.
 
-Open `index.html` directly, or run a small static server from the repo root:
+## Custom Domain
 
-```bash
-python -m http.server 5500
-```
-
-Then visit `http://localhost:5500`.
-
-## Local Backend
-
-```bash
-cd server
-copy env.example .env
-npm install
-npm run dev
-```
-
-The API runs at `http://localhost:3000`. Local frontend pages automatically try that URL.
-
-## Deploy
-
-Push to `main`. The GitHub Actions workflow publishes `index.html`, `raju_mama.html`, `.nojekyll`, and `assets/` to GitHub Pages.
-
-For a custom domain, create a root `CNAME` file containing only the domain, for example:
+Create a root `CNAME` file containing only your domain:
 
 ```text
 www.shreerajco.com
 ```
 
-Then configure the same domain in GitHub repository settings under Pages.
+Then set the same custom domain in GitHub repo `Settings` -> `Pages`.
 
-## Backend Hosting
+## Contact Form
 
-Deploy the `server/` folder to any Node host such as Render, Railway, Fly.io, or a VPS.
+GitHub Pages cannot run the Express backend. The form works on Pages in two modes:
 
-Use:
+- With no API URL set, it opens a prefilled email draft.
+- With an API URL set, it posts to the deployed backend.
 
-```text
-Build command: npm install
-Start command: npm start
-```
-
-After the API is live, set the frontend API URL in `index.html`:
+To connect a hosted API, update this line in `index.html`:
 
 ```html
 <meta name="contact-api" content="https://your-api-domain.example">
 ```
 
-Keep email and Firebase credentials only in backend environment variables.
+Host the backend separately from the `server/` folder on a Node service such as Render, Railway, Fly.io, or a VPS.
+
+## Optional Local Testing
+
+Local testing is optional and only for previewing before pushing:
+
+```bash
+python -m http.server 5500
+```
+
+Then open `http://localhost:5500`.

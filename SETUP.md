@@ -1,15 +1,119 @@
-# Setup and Deployment
+# GitHub Pages Setup
 
-This project has two deployable parts:
+This project is configured for GitHub Pages. The website is static, so GitHub Pages can host it directly from the workflow artifact.
 
-- Static website: `index.html`, `assets/`, and `raju_mama.html`, hosted on GitHub Pages or a custom domain.
-- Contact API: `server/`, hosted on a Node-compatible service.
+## Required GitHub Settings
 
-GitHub Pages cannot run an Express backend, so the API must be deployed separately if you want direct form submission without opening an email draft.
+1. Open the repository on GitHub.
+2. Go to `Settings` -> `Pages`.
+3. Under `Build and deployment`, set `Source` to `GitHub Actions`.
+4. Push to the `main` branch.
+5. Go to the `Actions` tab.
+6. Open `Deploy to GitHub Pages`.
+7. Wait for the deploy job to complete.
 
-## 1. Run the Website Locally
+Do not choose a local-machine or branch build process for this project. The workflow handles the Pages artifact.
 
-From the repository root:
+## What the Workflow Publishes
+
+The workflow file is:
+
+```text
+.github/workflows/pages.yml
+```
+
+It publishes:
+
+```text
+index.html
+404.html
+raju_mama.html
+.nojekyll
+assets/
+CNAME, if present
+```
+
+It does not publish:
+
+```text
+server/
+node_modules/
+desktop-check.png
+mobile-check.png
+```
+
+## If GitHub Pages Shows a Hosting Error
+
+Check these items first:
+
+1. `Settings` -> `Pages` -> `Source` must be `GitHub Actions`.
+2. The latest workflow run must be green in the `Actions` tab.
+3. The branch pushed must be `main`.
+4. `index.html` must be at the repository root.
+5. The repository must allow GitHub Actions under `Settings` -> `Actions` -> `General`.
+6. If using a custom domain, the `CNAME` file and Pages custom-domain setting must match exactly.
+
+The included `404.html` redirects unknown GitHub Pages paths back to the site homepage.
+
+## Custom Domain
+
+Create a root `CNAME` file with only your domain:
+
+```text
+www.shreerajco.com
+```
+
+Then configure the same value in GitHub `Settings` -> `Pages`.
+
+DNS examples:
+
+- `www` subdomain: create a CNAME record pointing to `yourusername.github.io`.
+- Root domain: use GitHub Pages A records from the GitHub Pages settings screen.
+
+## Contact Form on GitHub Pages
+
+GitHub Pages does not run Node or Express. That means the `server/` folder cannot run on Pages.
+
+Current Pages behavior:
+
+- If `<meta name="contact-api" content="">` is empty, the form opens a prefilled email draft.
+- If you deploy the API elsewhere and set the API URL, the form submits to that API.
+
+To connect a hosted backend, edit `index.html`:
+
+```html
+<meta name="contact-api" content="https://your-api-domain.example">
+```
+
+Then deploy the `server/` folder separately to a Node host.
+
+## Optional Backend Hosting
+
+Use a Node host such as Render, Railway, Fly.io, or a VPS.
+
+Backend settings:
+
+```text
+Root directory: server
+Build command: npm install
+Start command: npm start
+```
+
+Set environment variables from:
+
+```text
+server/env.example
+```
+
+Set `ALLOWED_ORIGINS` to your GitHub Pages URL and custom domain:
+
+```env
+ALLOWED_ORIGINS=https://yourusername.github.io,https://yourusername.github.io/shree-raj-co,https://www.shreerajco.com
+```
+
+## Optional Local Preview
+
+Local preview is not required for hosting. Use it only if you want to check the page before pushing:
 
 ```bash
 python -m http.server 5500
@@ -20,126 +124,3 @@ Open:
 ```text
 http://localhost:5500
 ```
-
-The frontend automatically uses `http://localhost:3000` as the API while running locally.
-
-## 2. Run the API Locally
-
-```bash
-cd server
-copy env.example .env
-npm install
-npm run dev
-```
-
-Open the health check:
-
-```text
-http://localhost:3000/api/health
-```
-
-## 3. Configure API Environment
-
-Edit `server/.env`.
-
-Required for email notifications:
-
-```env
-EMAIL_SERVICE=gmail
-EMAIL_USER=your-gmail@gmail.com
-EMAIL_PASS=your-16-character-app-password
-OWNER_EMAIL=shreerajco@yahoo.com
-```
-
-Allowed origins:
-
-```env
-ALLOWED_ORIGINS=http://localhost:5500,https://yourusername.github.io,https://www.yourdomain.com
-```
-
-Optional Firestore storage:
-
-```env
-FIREBASE_SERVICE_ACCOUNT={"type":"service_account","project_id":"..."}
-```
-
-If Firebase is not configured, the API writes submissions to `server/data/contact-submissions.jsonl`.
-
-## 4. Test the API
-
-```bash
-curl -X POST http://localhost:3000/api/contact ^
-  -H "Content-Type: application/json" ^
-  -d "{\"name\":\"Test Client\",\"email\":\"test@example.com\",\"phone\":\"9876543210\",\"service\":\"Income Tax / ITR Filing\",\"message\":\"I need help filing my return.\",\"website\":\"\"}"
-```
-
-Expected result:
-
-```json
-{
-  "success": true,
-  "message": "Enquiry received."
-}
-```
-
-## 5. Deploy the Static Site to GitHub Pages
-
-1. Push the repository to GitHub.
-2. Go to repository settings.
-3. Open Pages.
-4. Set the Pages source to GitHub Actions.
-5. Push to the `main` branch.
-
-The workflow at `.github/workflows/pages.yml` publishes only the static website files.
-
-## 6. Deploy the API
-
-Deploy the `server/` directory to a Node host.
-
-Use these commands:
-
-```text
-Build command: npm install
-Start command: npm start
-```
-
-Set all environment variables from `server/env.example` in the hosting dashboard.
-
-After deployment, confirm:
-
-```text
-https://your-api-domain.example/api/health
-```
-
-## 7. Connect the Website to the API
-
-In `index.html`, update:
-
-```html
-<meta name="contact-api" content="">
-```
-
-to:
-
-```html
-<meta name="contact-api" content="https://your-api-domain.example">
-```
-
-Commit and push the change. The next GitHub Pages deployment will use the live API.
-
-## 8. Use a Custom Domain
-
-Create a root `CNAME` file with only the domain:
-
-```text
-www.shreerajco.com
-```
-
-Commit and push it. The workflow automatically includes `CNAME` when it exists.
-
-In GitHub Pages settings, add the same custom domain. Then configure DNS with your domain provider:
-
-- For `www`, create a CNAME record pointing to `yourusername.github.io`.
-- For an apex/root domain, use GitHub Pages A records in your DNS provider.
-
-Keep backend secrets out of GitHub. Only the API URL belongs in `index.html`.
